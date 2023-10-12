@@ -1,53 +1,52 @@
-import "./index.css";
-import Song from "./Song";
 import { React, useState } from "react";
+import "./index.css";
 
-function App() {
-  const music_player_label = document.querySelector("#music-player-label");
-  const music_input = document.querySelector("#music-input");
-  const music_player_output = document.querySelector("#music-player-output");
-  const songname = document.querySelector("#songname");
-  const audio = document.querySelector("#audio");
-
-  const [audioUrl, setAudioUrl] = useState("");
+export default function App() {
+  const [songname, setSongname] = useState("");
+  const [audiosrc, setAudiosrc] = useState("");
 
   function handlefileinput(e) {
     if (!e.target.files.length) return;
+    // console.log(e.target.files);
 
-    setAudioUrl(URL.createObjectURL(e.target.files[0]));
-    audio.addEventListener("load", () => {
-      URL.revokeObjectURL(audioUrl);
-    });
-    audio.src = audioUrl;
-    audio.controls = "true";
-    // console.log(e.target.files[0].name)
-    songname.innerText = `${e.target.files[0].name}`;
+    const fileList = e.target.files[0];
+    setSongname(fileList.name);
+    setAudiosrc(URL.createObjectURL(fileList));
+    // console.log(fileList.name);
+    // console.log(URL.createObjectURL(fileList))
   }
 
   function handleDragover(e) {
     e.stopPropagation();
     e.preventDefault();
-    // Style the drag-and-drop as a "copy file" operation.
     e.dataTransfer.dropEffect = "copy";
   }
 
   function handleDrop(e) {
     e.stopPropagation();
     e.preventDefault();
-  
-    const fileList = [e.dataTransfer.files];
-  
-    console.log(fileList);
 
-    setAudioUrl(URL.createObjectURL(fileList[0]))
-  
-    // audio.addEventListener("load", () => {
-    //   URL.revokeObjectURL(audioUrl);
-    // });
-  
-    audio.src = audioUrl;
-    audio.controls = "true";
-    songname.innerText = `${fileList[0].name}`;
+    const fileList = e.dataTransfer.files[0];
+    // console.log(typeof fileList);
+
+    setSongname(fileList.name);
+    setAudiosrc(URL.createObjectURL(fileList));
+    // console.log(fileList);
+    // console.log(fileList.name);
+    // console.log(URL.createObjectURL(fileList))
+  }
+
+  // function handleTimeUpdate(e) {
+  //   let currenttime = e.target.currentTime;
+  //   let duration = e.target.duration;
+  //   let minutes = Math.floor(currenttime / 60);
+  //   let seconds = Math.floor(currenttime - minutes * 60);
+  //   // console.log(minutes, seconds);
+  // }
+
+  function load(e) {
+    console.log(e.target.files[0]);
+    URL.revokeObjectURL(e.target.files[0]);
   }
 
   return (
@@ -59,7 +58,7 @@ function App() {
           onDragOver={handleDragover}
           onDrop={handleDrop}
         >
-          <span>Drag and drop or select a song to play</span>
+          <span>Upload a song to play</span>
         </label>
         <input
           onChange={handlefileinput}
@@ -70,13 +69,17 @@ function App() {
           accept=".mp3"
         />
         <div id="music-player-output">
-          {() => {
-            return <Song />;
-          }}
+          <div className="song">
+            <span id="songname" title={songname}>{songname}</span>
+            <audio
+              src={audiosrc}
+              controls
+              // onTimeUpdate={handleTimeUpdate}
+              onLoad={load}
+            ></audio>
+          </div>
         </div>
       </div>
     </>
   );
 }
-
-export default App;
