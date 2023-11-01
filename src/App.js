@@ -7,13 +7,10 @@ export default function App() {
 
   function handlefileinput(e) {
     if (!e.target.files.length) return;
-    // console.log(e.target.files);
-
+    
     const fileList = e.target.files[0];
     setSongname(fileList.name);
     setAudiosrc(URL.createObjectURL(fileList));
-    // console.log(fileList.name);
-    // console.log(URL.createObjectURL(fileList))
   }
 
   function handleDragover(e) {
@@ -27,13 +24,9 @@ export default function App() {
     e.preventDefault();
 
     const fileList = e.dataTransfer.files[0];
-    // console.log(typeof fileList);
 
     setSongname(fileList.name);
     setAudiosrc(URL.createObjectURL(fileList));
-    // console.log(fileList);
-    // console.log(fileList.name);
-    // console.log(URL.createObjectURL(fileList))
   }
 
   // function handleTimeUpdate(e) {
