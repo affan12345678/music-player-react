@@ -58,7 +58,7 @@ export default function App() {
           onDragOver={handleDragover}
           onDrop={handleDrop}
         >
-          <span>Upload a song to play</span>
+          <span>Drop a song here to play</span>
         </label>
         <input
           onChange={handlefileinput}
